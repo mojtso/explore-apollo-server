@@ -1,0 +1,22 @@
+{
+  "name": "explore-app",
+  "version": "0.10",
+  "description": "exploring graphql and apollo-server2 for nodejs app",
+  "main": "index.js",
+  "author": "Mojtso_",
+  "license": "MIT",
+  "scripts": {
+    "start": "NODE_ENV=production node -r esm .",
+    "dev": "NODE_ENV=development nodemon  -r esm"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.2.6",
+    "esm": "^3.0.84",
+    "express": "^4.16.4",
+    "graphql": "^14.0.2",
+    "mongoose": "^5.3.15"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.7"
+  }
+}
