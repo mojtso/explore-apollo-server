@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
+import Joi from 'joi';
 import { UserInputError } from 'apollo-server-express';
 import { User } from '../models';
+import { SignUp } from '../schemas';
 
 export default {
     Query: {
@@ -12,11 +14,14 @@ export default {
             return User.findById(args.id);
         },
         users: (root, args, context, info) => {
+            // TODO: auth, projection, pagination
             return User.find({});
         }
     },
     Mutation: {
-        signUp: (root, args, context, info) => {
+        signUp: async (root, args, context, info) => {
+
+            await Joi.validate(args, SignUp, {abortEarly: false })
 
             return User.create(args);
         }

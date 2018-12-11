@@ -2,23 +2,35 @@ import mongoose from 'mongoose';
 import { hash } from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
-    email: String,
-    username: String,
+    email: {
+        type: String,
+        validate: {
+            validator: email => User.doesntExist({ email }),
+            message: ({ value }) => `Email ${value} has already been taken.`
+        }
+    },
+    username: {
+        type: String,
+        validate: {
+            validator: username => User.doesntExist({ username }),
+            message: ({ value }) => `Username ${value} has already been taken.`
+        }
+    },
     name: String,
     password: String,
 }, {
     timestamps: true //create 'createdAt' and 'updatedAt'
 });
 
-userSchema.pre('save', async function (next) {
+userSchema.statics.doesntExist = async function(options) {
+    return await this.where(options).countDocuments() === 0
+};
+
+userSchema.pre('save', async function () {
     if(this.isModified('password')) {
-        try {
-            this.password = await hash(this.password, 10) //args.password
-        }catch(err) {
-            next(err);
-        }
+        this.password = await hash(this.password, 10) //args.password
     }
-    next();
 });
 
-export default mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+export default User;
