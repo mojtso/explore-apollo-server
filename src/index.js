@@ -52,8 +52,6 @@ import {
       }
     }));
 
-    console.log(store);
-
     app.disable('x-powered-by');
 
 
@@ -61,7 +59,8 @@ import {
       // These will be defined for both new or existing servers
       typeDefs,
       resolvers,
-      playground: !IN_PROD
+      playground: !IN_PROD,
+      context: ({ req, res }) => { return { req, res } }
     });
 
     server.applyMiddleware({ app }); // app is from an existing express app
