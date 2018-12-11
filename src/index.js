@@ -10,7 +10,9 @@ import {
   APP_PORT, IN_PROD,
   DB_USERNAME, DB_PASSWORD,
   DB_PORT, DB_NAME, 
-  SESS_NAME, SESS_SECRET, SESS_LIFETIME } from './config';
+  SESS_NAME, SESS_SECRET, SESS_LIFETIME,
+  REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } from './config';
+  import { createClient as createRedisClient } from 'redis';
 
 
 (async () => {
@@ -21,16 +23,26 @@ import {
     );
 
     const app = express();
-    const RedisStore = connectRedis(session);
-    const store = RedisStore({
+    
+    // const RedisStore = connectRedis(session);
+    
+    // const store = RedisStore({
+    //   host: REDIS_HOST,
+    //   port: REDIS_PORT,
+    // });
+    
+    const redisClient = createRedisClient({
       host: REDIS_HOST,
       port: REDIS_PORT,
-      pass: REDIS_PASSWORD
+    }); 
+
+    const RedisStore = connectRedis(session);
+    const store = new RedisStore({
+      client: redisClient
     });
 
-    app.disable('x-powered-by');
     app.use(session({
-      store,
+      store, 
       name: SESS_NAME,
       secret: SESS_SECRET,
       cookie: {
@@ -39,6 +51,10 @@ import {
         secure: IN_PROD
       }
     }));
+
+    console.log(store);
+
+    app.disable('x-powered-by');
 
 
     const server = new ApolloServer({
