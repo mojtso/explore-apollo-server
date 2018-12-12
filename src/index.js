@@ -13,6 +13,7 @@ import {
   SESS_NAME, SESS_SECRET, SESS_LIFETIME,
   REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } from './config';
   import { createClient as createRedisClient } from 'redis';
+import { request } from 'http';
 
 
 (async () => {
@@ -59,7 +60,12 @@ import {
       // These will be defined for both new or existing servers
       typeDefs,
       resolvers,
-      playground: !IN_PROD,
+      cors: false,
+      playground: IN_PROD? false: {
+        settings: {
+          'request.credentials': 'include'
+        }
+      },
       context: ({ req, res }) => { return { req, res } }
     });
 

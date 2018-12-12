@@ -23,15 +23,20 @@ export default {
         users: (root, args, { req }, info) => {
             // TODO: auth, projection, pagination
             Auth.checkSignIn(req);
+
             return User.find({});
         }
     },
     Mutation: {
-        signUp: async (root, args, context, info) => {
+        signUp: async (root, args, { req }, info) => {
 
             await Joi.validate(args, signUp, {abortEarly: false })
 
-            return User.create(args);
+            const user = await User.create(args);
+
+            req.session.userId = user.id;
+            console.log(req);
+            return user;
         },
         signIn: async (root, args, { req }, info) => {
             const { userId } = req.session;
@@ -48,8 +53,10 @@ export default {
 
             return user;
         },
-        signOut: async (root, args, { req }, info) => {
+        signOut: async (root, args, { req, res }, info) => {
             await Auth.checkSignIn(req);
+
+            return await Auth.signOut(req, res)
         }
     }
 }
