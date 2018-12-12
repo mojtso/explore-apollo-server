@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { hash } from 'bcryptjs';
+import { hash, compare } from 'bcryptjs';
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true //create 'createdAt' and 'updatedAt'
 });
+
+userSchema.method.matchesPassword = function(password) {
+    return compare(password, this.password);
+};
 
 userSchema.statics.doesntExist = async function(options) {
     return await this.where(options).countDocuments() === 0

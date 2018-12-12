@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import Joi from 'joi';
 import { UserInputError } from 'apollo-server-express';
 import { User } from '../models';
-import { signUp } from '../schemas';
+import { signUp, signIn } from '../schemas';
 import * as Auth  from '../auth';
 
 export default {
@@ -40,7 +40,16 @@ export default {
                 return User.findById(userId);
             }
 
+            await Joi.validate(args, signIn, { abortEarly: false });
+
+            const user = await Auth.attemptSignIn(args.email, args.password);
+
+            req.session.userId = user.id;
+
             return user;
+        },
+        signOut: async (root, args, { req }, info) => {
+            await Auth.checkSignIn(req);
         }
     }
 }
