@@ -37,6 +37,10 @@ import { request } from 'http';
       port: REDIS_PORT,
     }); 
 
+    redisClient.on('connect', function() {
+      console.log('App Connected to Redis');
+    });
+
     const RedisStore = connectRedis(session);
     const store = new RedisStore({
       client: redisClient

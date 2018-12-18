@@ -35,7 +35,7 @@ export default {
             const user = await User.create(args);
 
             req.session.userId = user.id;
-            console.log(req);
+            
             return user;
         },
         signIn: async (root, args, { req }, info) => {
