@@ -5,13 +5,13 @@ export const {
     DB_USERNAME = 'admin',
     DB_PASSWORD = '',
     DB_PORT = 27017,
-    DB_NAME = 'chat_db',
+    DB_NAME = 'users-db',
 
     SESS_NAME='sid',
     SESS_SECRET='ssh!pass!',
     SESS_LIFETIME=1000 * 60 * 60 * 2,
 
-    REDIS_HOST='127.0.0.1',
+    REDIS_HOST='0.0.0.0',
     REDIS_PORT=6379,
     REDIS_PASSWORD='',
 

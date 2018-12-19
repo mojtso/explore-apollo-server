@@ -33,7 +33,7 @@ export default {
             await Joi.validate(args, signUp, {abortEarly: false })
 
             const user = await User.create(args);
-
+            
             req.session.userId = user.id;
             
             return user;

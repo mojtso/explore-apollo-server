@@ -13,13 +13,12 @@ import {
   SESS_NAME, SESS_SECRET, SESS_LIFETIME,
   REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } from './config';
   import { createClient as createRedisClient } from 'redis';
-import { request } from 'http';
 
 
 (async () => {
 
   try {
-    await mongoose.connect(`mongodb://localhost:${DB_PORT}/${DB_NAME}`,
+    await mongoose.connect(`mongodb://mongo:${DB_PORT}/${DB_NAME}`,
       { useNewUrlParser: true }
     );
 
@@ -33,7 +32,7 @@ import { request } from 'http';
     // });
     
     const redisClient = createRedisClient({
-      host: REDIS_HOST,
+      host: 'redis',
       port: REDIS_PORT,
     }); 
 
